@@ -1,32 +1,32 @@
 export const enum MessageType {
   // Requests
-  ClientInfo = 'se.cygni.snake.api.request.ClientInfo',
-  StartGame = 'se.cygni.snake.api.request.StartGame',
-  RegisterMove = 'se.cygni.snake.api.request.RegisterMove',
-  RegisterPlayer = 'se.cygni.snake.api.request.RegisterPlayer',
-  HeartBeatRequest = 'se.cygni.snake.api.request.HeartBeatRequest',
+  ClientInfo = 'se.cygni.paintbot.api.request.ClientInfo',
+  StartGame = 'se.cygni.paintbot.api.request.StartGame',
+  RegisterMove = 'se.cygni.paintbot.api.request.RegisterMove',
+  RegisterPlayer = 'se.cygni.paintbot.api.request.RegisterPlayer',
+  HeartBeatRequest = 'se.cygni.paintbot.api.request.HeartBeatRequest',
 
   // Responses
-  HeartBeatResponse = 'se.cygni.snake.api.response.HeartBeatResponse',
-  PlayerRegistered = 'se.cygni.snake.api.response.PlayerRegistered',
+  HeartBeatResponse = 'se.cygni.paintbot.api.response.HeartBeatResponse',
+  PlayerRegistered = 'se.cygni.paintbot.api.response.PlayerRegistered',
 
   // Exceptions
-  InvalidMessage = 'se.cygni.snake.api.exception.InvalidMessage',
-  InvalidPlayerName = 'se.cygni.snake.api.exception.InvalidPlayerName',
-  NoActiveTournament = 'se.cygni.snake.api.exception.NoActiveTournament',
+  InvalidMessage = 'se.cygni.paintbot.api.exception.InvalidMessage',
+  InvalidPlayerName = 'se.cygni.paintbot.api.exception.InvalidPlayerName',
+  NoActiveTournament = 'se.cygni.paintbot.api.exception.NoActiveTournament',
 
   // Events
-  ArenaUpdate = 'se.cygni.snake.api.event.ArenaUpdateEvent',
-  CharacterStunned = 'se.cygni.snake.api.event.CharacterStunnedEvent',
-  GameAborted = 'se.cygni.snake.api.event.GameAbortedEvent',
-  GameChanged = 'se.cygni.snake.api.event.GameChangedEvent',
-  GameCreated = 'se.cygni.snake.api.event.GameCreatedEvent',
-  GameEnded = 'se.cygni.snake.api.event.GameEndedEvent',
-  GameLink = 'se.cygni.snake.api.event.GameLinkEvent',
-  GameResult = 'se.cygni.snake.api.event.GameResultEvent',
-  GameStarting = 'se.cygni.snake.api.event.GameStartingEvent',
-  MapUpdate = 'se.cygni.snake.api.event.MapUpdateEvent',
-  TournamentEnded = 'se.cygni.snake.api.event.TournamentEndedEvent',
+  ArenaUpdate = 'se.cygni.paintbot.api.event.ArenaUpdateEvent',
+  CharacterStunned = 'se.cygni.paintbot.api.event.CharacterStunnedEvent',
+  GameAborted = 'se.cygni.paintbot.api.event.GameAbortedEvent',
+  GameChanged = 'se.cygni.paintbot.api.event.GameChangedEvent',
+  GameCreated = 'se.cygni.paintbot.api.event.GameCreatedEvent',
+  GameEnded = 'se.cygni.paintbot.api.event.GameEndedEvent',
+  GameLink = 'se.cygni.paintbot.api.event.GameLinkEvent',
+  GameResult = 'se.cygni.paintbot.api.event.GameResultEvent',
+  GameStarting = 'se.cygni.paintbot.api.event.GameStartingEvent',
+  MapUpdate = 'se.cygni.paintbot.api.event.MapUpdateEvent',
+  TournamentEnded = 'se.cygni.paintbot.api.event.TournamentEndedEvent',
 }
 
 export type CharacterAction = 'LEFT' | 'RIGHT' | 'UP' | 'DOWN' | 'STAY' | 'EXPLODE';
@@ -67,7 +67,7 @@ export interface CharacterInfo {
   stunnedForGameTicks: number;
 }
 
-export interface ColissionInfo {
+export interface CollisionInfo {
   position: number;
   colliders: string;
 }
@@ -84,7 +84,7 @@ export interface Map {
   characterInfos: CharacterInfo[];
   bombPositions: number[];
   obstaclePositions: number[];
-  colissionInfos: ColissionInfo[];
+  collisionInfos: CollisionInfo[];
   bombingInfos: BombingInfo[];
 }
 
