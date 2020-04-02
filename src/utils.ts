@@ -4,7 +4,7 @@ function id<T>(obj: T) {
   return obj;
 }
 
-function memoize<Args extends Array<unknown>, V>(fn: (...args: Args) => V, createKey: (...args: Args) => string) {
+function memoize<Args extends unknown[], V>(fn: (...args: Args) => V, createKey: (...args: Args) => string) {
   const cache: Record<string, V> = {};
   return (...args: Args) => {
     const key = createKey(...args);
