@@ -152,6 +152,7 @@ export class MapUtility {
    * @returns {Coordinate} Coordinate
    */
   convertPositionToCoordinate(position) {
+    console.log(this);
     const y = Math.floor(position / this.map.width);
     const x = position - y * this.map.width;
     return new Coordinate(x, y);
@@ -162,7 +163,7 @@ export class MapUtility {
    * @param {number[]} positions
    */
   convertPositionsToCoordinates(positions) {
-    return positions.map(this.convertPositionToCoordinate);
+    return positions.map((p) => this.convertPositionToCoordinate(p));
   }
 
   /**
@@ -185,7 +186,7 @@ export class MapUtility {
    * @returns {number[]} position list of converted positions
    */
   convertCoordinatesToPositions(coordinates) {
-    return coordinates.map(this.convertCoordinateToPosition);
+    return coordinates.map((c) => this.convertCoordinateToPosition(c));
   }
 
   /**
