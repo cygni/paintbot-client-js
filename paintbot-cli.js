@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-modules --unhandled-rejections=strict
+#!/usr/bin/env node --unhandled-rejections=strict
 import { promises as fs } from 'fs';
 import url from 'url';
 import process from 'process';
@@ -19,6 +19,7 @@ async function run(botPath = defaultBotPath, { host, venue, autostart }) {
     autoStart: autostart,
     onGameReady(startGame) {
       const rl = readline.createInterface({
+        // @ts-ignore
         input: process.stdin,
         output: process.stdout,
       });
