@@ -1,7 +1,6 @@
 #!/usr/bin/env node --experimental-modules --unhandled-rejections=strict
 import { promises as fs } from 'fs';
 import url from 'url';
-import path from 'path';
 import process from 'process';
 import readline from 'readline';
 import commander from 'commander';
@@ -11,7 +10,8 @@ import { createNodeClient } from './index.js';
 const defaultBotPath = url.fileURLToPath(new URL('./bot/bot.js', import.meta.url));
 
 async function run(botPath = defaultBotPath, { host, venue, autostart }) {
-  const bot = await import(path.resolve(botPath));
+  const bot = await import(url.pathToFileURL(botPath).href);
+
   const client = createNodeClient({
     host,
     venue,
