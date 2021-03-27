@@ -112,15 +112,14 @@ export function createClient({
     },
 
     [MessageType.GameEnded]({ playerWinnerName }) {
-      logger.info(`Game has ended. The winner was ${playerWinnerName}!`);
       logger.info(`You can view the game at ${latestGameLink}`);
       if (gameMode === GameMode.Training) {
+        logger.info(`Game has ended. The winner was ${playerWinnerName}!`);
         close();
       }
     },
 
-    [MessageType.TournamentEnded]({ playerWinnerName }) {
-      logger.info(`Tournament has ended. The winner was ${playerWinnerName}!`);
+    [MessageType.TournamentEnded]() {
       close();
     },
 
