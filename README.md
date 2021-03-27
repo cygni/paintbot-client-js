@@ -1,5 +1,7 @@
 # Paintbot client in JavaScript
 
+[![CI](https://github.com/cygni/paintbot-client-js/workflows/CI/badge.svg)](https://github.com/cygni/paintbot-client-js/actions?query=branch%3Amaster+workflow%3ACI)
+
 This is a Paintbot Client written in JavaScript (ECMAScript 2020)
 
 For more information about what Paintbot is, see: https://paintbot.cygni.se/
