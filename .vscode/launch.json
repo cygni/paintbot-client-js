@@ -7,7 +7,6 @@
       "name": "Run tests",
       "program": "${workspaceFolder}/node_modules/.bin/_mocha",
       "args": ["--no-timeouts", "--colors"],
-      "runtimeArgs": ["--experimental-modules"],
       "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": ["<node_internals>/**/*.js", "${workspaceFolder}/node_modules/mocha/**/*.js"]
     },
@@ -16,7 +15,6 @@
       "request": "launch",
       "name": "Launch paintbot",
       "program": "${workspaceFolder}/paintbot-cli.js",
-      "runtimeArgs": ["--experimental-modules"],
       "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": ["<node_internals>/**/*.js"]
     }

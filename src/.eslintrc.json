@@ -4,7 +4,14 @@
     "node": false
   },
   "rules": {
-    "import/no-extraneous-dependencies": "warn",
-    "import/no-nodejs-modules": "error"
+    "node/no-restricted-import": [
+      "error",
+      [
+        {
+          "name": "*",
+          "message": "Do not import from external dependencies, since that will not work in browsers."
+        }
+      ]
+    ]
   }
 }

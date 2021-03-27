@@ -1,8 +1,9 @@
 {
   "root": true,
-  "extends": ["eslint:recommended", "prettier", "plugin:import/recommended"],
-  "plugins": ["prettier"],
-  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "plugin:prettier/recommended", "plugin:node/recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "env": {
     "es6": true,
     "node": true,
@@ -12,8 +13,6 @@
     "curly": "error",
     "prefer-const": "error",
     "class-methods-use-this": "error",
-    "prettier/prettier": "error",
-    "import/extensions": ["error", "always", { "ignorePackages": true }],
-    "import/no-commonjs": "error"
+    "node/file-extension-in-import": ["error"]
   }
 }

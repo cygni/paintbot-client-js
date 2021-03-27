@@ -127,10 +127,14 @@ export class MapUtility {
    */
   constructor(map, playerId) {
     this.map = map;
-    this.mapSize = map.height * map.width;
     this.playerId = playerId;
+
+    /** @type {Map<string, CharacterInfo>} */
     this.characterInfoMap = new Map();
+
+    /** @type {Map<number, Tile>} */
     this.positionToTiles = new Map();
+
     for (const p of this.map.powerUpPositions) {
       this.positionToTiles.set(p, powerUpTile);
     }
@@ -145,6 +149,11 @@ export class MapUtility {
     }
   }
 
+  get mapSize() {
+    const { width, height } = this.map;
+    return width * height;
+  }
+
   /**
    * Converts a position in the flattened single array representation
    * of the Map to a Coordinate.
@@ -152,7 +161,6 @@ export class MapUtility {
    * @returns {Coordinate} Coordinate
    */
   convertPositionToCoordinate(position) {
-    console.log(this);
     const y = Math.floor(position / this.map.width);
     const x = position - y * this.map.width;
     return new Coordinate(x, y);
@@ -160,10 +168,10 @@ export class MapUtility {
 
   /**
    * Converts a list of positions in array format to list of coordinates.
-   * @param {number[]} positions
+   * @param {readonly number[]} positions
    */
   convertPositionsToCoordinates(positions) {
-    return positions.map((p) => this.convertPositionToCoordinate(p));
+    return positions.map(this.convertPositionToCoordinate, this);
   }
 
   /**
@@ -182,31 +190,36 @@ export class MapUtility {
 
   /**
    * Converts a list of coordinates to position array format
-   * @param {Coordinate[]} coordinates
+   * @param {readonly Coordinate[]} coordinates
    * @returns {number[]} position list of converted positions
    */
   convertCoordinatesToPositions(coordinates) {
-    return coordinates.map((c) => this.convertCoordinateToPosition(c));
+    return coordinates.map(this.convertCoordinateToPosition, this);
   }
 
   /**
    * @returns {Coordinate} player's coordinate
    */
   getMyCoordinate() {
-    return this.convertPositionToCoordinate(this.characterInfoMap.get(this.playerId).position);
+    const { position } = this.getMyCharacterInfo();
+    return this.convertPositionToCoordinate(position);
   }
 
   /**
    * @returns {CharacterInfo} player's CharacterInfo
    */
   getMyCharacterInfo() {
-    return this.characterInfoMap.get(this.playerId);
+    const characterInfo = this.characterInfoMap.get(this.playerId);
+    if (characterInfo === undefined) {
+      throw new Error('My character info is missing');
+    }
+    return characterInfo;
   }
 
   /**
    *
    * @param {string} playerId the id of the player too look up
-   * @returns {CharacterInfo?} the character info or undefined
+   * @returns {CharacterInfo | undefined} the character info or undefined
    */
   getCharacterInfoOf(playerId) {
     return this.characterInfoMap.get(playerId);
@@ -215,10 +228,14 @@ export class MapUtility {
   /**
    * Returns an array of coordinates painted in the provided player's colour.
    * @param {string} playerId
-   * @returns {Coordinate[]}
+   * @returns {Coordinate[] | undefined}
    */
   getPlayerColouredCoordinates(playerId) {
-    return this.convertPositionsToCoordinates(this.characterInfoMap.get(playerId).colouredPositions);
+    const characterInfo = this.characterInfoMap.get(playerId);
+    if (characterInfo === undefined) {
+      return undefined;
+    }
+    return this.convertPositionsToCoordinates(characterInfo.colouredPositions);
   }
 
   /**
@@ -238,7 +255,7 @@ export class MapUtility {
   /**
    * Checks if it's possible to move in the action specified
    * @param {Action} action
-   * @returns if action is available for movement
+   * @returns {boolean} if action is available for movement
    */
   canIMoveInDirection(action) {
     try {
@@ -285,7 +302,7 @@ export class MapUtility {
   /**
    *
    * @param {number} position
-   * @returns true if the TileContent at position is Empty or contains Power Up
+   * @returns {boolean} true if the TileContent at position is Empty or contains Power Up
    */
   isTilePositionAvailableForMovementTo(position) {
     if (this.isPositionOutOfBounds(position)) {
@@ -293,42 +310,40 @@ export class MapUtility {
     }
 
     const tile = this.positionToTiles.get(position);
-    if (!tile) {
-      return true;
-    }
 
-    const tileType = tile.type;
-
-    return !(tileType === TileType.Character || tileType === TileType.Obstacle);
+    return tile == null || tile.type === TileType.Empty || tile.type === TileType.PowerUp;
   }
 
   /**
    * @param {number} position
-   * @return the TileContent at the specified position of the flattened map.
+   * @returns {Tile} the TileContent at the specified position of the flattened map.
    */
   getTileAt(position) {
     if (this.isPositionOutOfBounds(position)) {
       throw new RangeError(`Position [${position}] is out of bounds`);
     }
 
-    const tile = this.positionToTiles.get(position);
-
-    if (tile) {
-      return tile;
-    }
-
-    return emptyTile;
+    return this.positionToTiles.get(position) ?? emptyTile;
   }
 
-  getCharacter(position) {
+  /**
+   *
+   * @param {number} position
+   * @returns {Tile | undefined}
+   */
+  getCharacterTile(position) {
     const playerId = this.getPlayerIdAtPosition(position);
     const characterInfo = this.characterInfoMap.get(playerId);
+    if (characterInfo === undefined) {
+      return undefined;
+    }
     return createCharacterTile(characterInfo);
   }
 
   getPlayerIdAtPosition(position) {
     const tile = this.getTileAt(position);
     if (tile.type === TileType.Character) {
+      // @ts-expect-error
       return tile.character.id;
     }
     throw new Error(`No paintbot at position: ${position}`);

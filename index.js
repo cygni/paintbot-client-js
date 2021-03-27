@@ -16,10 +16,5 @@ const clientInfo = Object.freeze({
 export * from './src/index.js';
 
 export function createNodeClient(options) {
-  return createClient({
-    // @ts-ignore
-    WebSocket,
-    clientInfo,
-    ...options,
-  });
+  return createClient({ WebSocket, clientInfo, ...options });
 }
