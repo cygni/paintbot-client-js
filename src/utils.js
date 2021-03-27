@@ -152,7 +152,6 @@ export class MapUtility {
    * @returns {Coordinate} Coordinate
    */
   convertPositionToCoordinate(position) {
-    console.log(this);
     const y = Math.floor(position / this.map.width);
     const x = position - y * this.map.width;
     return new Coordinate(x, y);
