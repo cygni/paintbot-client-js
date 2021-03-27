@@ -8,7 +8,8 @@ For running your own server see [Paintbot Server Repository](https://github.com/
 
 ## Requirements
 
-- Yarn or NPM
+- Node.js v14 or later
+- NPM
 - Paintbot Server (local or remote, there's one running by Cygni so no worries ;) )
 
 ## Installation
@@ -17,11 +18,11 @@ A. Clone the repository: `git clone git@github.com:cygni/paintbot-client-js.git`
 
 B. Open: `<repo>/`
 
-C. Execute: `yarn` or `npm install`
+C. Execute: `npm install`
 
 ## Usage
 
-`yarn start` or `npm start` to run a training game
+`npm start` to run a training game
 
 ## Implementation
 
