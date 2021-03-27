@@ -20,7 +20,7 @@ export function createClient({
   WebSocket: WebSocketImpl = WebSocket,
   onGameReady,
   clientInfo,
-  gameSettings = bot.GAME_SETTINGS,
+  gameSettings = bot?.GAME_SETTINGS,
 }) {
   if (bot == null) {
     throw new Error('You must specify a bot to use!');
@@ -32,7 +32,7 @@ export function createClient({
   logger.info(`WebSocket is connecting to ${href}`);
 
   let heartbeatTimeout;
-  let gameMode;
+  let latestGameMode;
   let latestGameSettings;
   let latestGameLink;
 
@@ -47,7 +47,7 @@ export function createClient({
       const timeInMsPerTick = latestGameSettings.timeInMsPerTick;
       const totalTicks = (durationInSeconds * 1000) / timeInMsPerTick;
       const progress = (gameTick / totalTicks) * 100;
-      logger.info(`Progress ${Math.floor(progress)}%`);
+      logger.info(`Progress: ${Math.floor(progress)}%`);
     }
   }
 
@@ -73,15 +73,16 @@ export function createClient({
       heartbeatTimeout = setTimeout(sendMessage, HEARTBEAT_INTERVAL, createHeartbeatRequestMessage(receivingPlayerId));
     },
 
-    [MessageType.PlayerRegistered]({ receivingPlayerId, gameMode: _gameMode, gameSettings }) {
-      gameMode = _gameMode;
+    [MessageType.PlayerRegistered]({ receivingPlayerId, gameMode, gameSettings }) {
+      latestGameMode = gameMode;
       latestGameSettings = gameSettings;
       if (!SUPPORTED_GAME_MODES.has(gameMode)) {
         logger.error(`Unsupported game mode: ${gameMode}`);
         close();
       } else {
         logger.info(`Player ${bot.BOT_NAME} was successfully registered!`);
-        logger.info(`Game mode: ${gameMode}\n${JSON.stringify(gameSettings, undefined, 2)}`);
+        logger.info('Game mode:', gameMode);
+        logger.info('Game settings:', gameSettings);
         sendMessage(createHeartbeatRequestMessage(receivingPlayerId));
       }
     },
@@ -94,7 +95,7 @@ export function createClient({
     [MessageType.GameLink]({ url }) {
       logger.info(`Game is ready`);
       latestGameLink = url;
-      if (autoStart && gameMode === GameMode.Training) {
+      if (autoStart && latestGameMode === GameMode.Training) {
         sendMessage(createStartGameMessage());
       } else {
         onGameReady(() => {
@@ -114,7 +115,7 @@ export function createClient({
     [MessageType.GameEnded]({ playerWinnerName }) {
       logger.info(`Game has ended. The winner was ${playerWinnerName}!`);
       logger.info(`You can view the game at ${latestGameLink}`);
-      if (gameMode === GameMode.Training) {
+      if (latestGameMode === GameMode.Training) {
         close();
       }
     },
@@ -134,15 +135,8 @@ export function createClient({
 
   function handleMessage({ data }) {
     const message = JSON.parse(data);
-    const messageHandler = messageHandlers[message.type];
-
-    if (messageHandler !== undefined) {
-      messageHandler(message);
-    }
-
-    if (bot.onMessage !== undefined) {
-      bot.onMessage(message);
-    }
+    messageHandlers[message.type]?.(message);
+    bot.onMessage?.(message);
   }
 
   function handleError(error) {
