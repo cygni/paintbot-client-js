@@ -1,5 +1,7 @@
 # Paintbot client in JavaScript
 
+[![CI](https://github.com/cygni/paintbot-client-js/workflows/CI/badge.svg)](https://github.com/cygni/paintbot-client-js/actions?query=branch%3Amaster+workflow%3ACI)
+
 This is a Paintbot Client written in JavaScript (ECMAScript 2020)
 
 For more information about what Paintbot is, see: https://paintbot.cygni.se/
@@ -8,7 +10,8 @@ For running your own server, see [Paintbot Server Repository](https://github.com
 
 ## Requirements
 
-- Yarn or npm
+- Node.js v14 or later
+- npm
 - Paintbot Server (local or remote, there's one running by Cygni so no worries ;) )
 
 ## Installation
@@ -25,13 +28,9 @@ Open the directory of your newly cloned project.
 cd paintbot-client-js/
 ```
 
-Now, install it with either yarn or npm.
+Now, install it.
 
-```bash
-# with yarn
-yarn
-
-# with npm
+```
 npm install
 ```
 
@@ -39,18 +38,14 @@ npm install
 
 To run a training game:
 
-```bash
-# with yarn
-yarn start
-
-# with npm
+```
 npm start
 ```
 
 You can supply the path of your bot as an argument, e.g.:
 
-```bash
-yarn start ./bot/bot.js
+```
+npm start ./bot/bot.js
 ```
 
 The default path is "./bot/bot.js".
@@ -66,7 +61,7 @@ There are also some other options:
 When the time comes for the real game to start, connect to it by setting the venue flag to "tournament", e.g.:
 
 ```
-yarn start ./bot/bot.js --venue tournament
+npm start ./bot/bot.js --venue tournament
 ```
 
 ## Implementation

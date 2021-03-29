@@ -1,12 +1,12 @@
-import { strict as assert } from 'assert';
+import assert from 'assert';
 import { Action, Coordinate } from '../src/utils.js';
 
 describe('Direction', () => {
   it('has the correct directions', () => {
-    assert.equal(Action.Up, 'UP');
-    assert.equal(Action.Down, 'DOWN');
-    assert.equal(Action.Left, 'LEFT');
-    assert.equal(Action.Right, 'RIGHT');
+    assert.strictEqual(Action.Up, 'UP');
+    assert.strictEqual(Action.Down, 'DOWN');
+    assert.strictEqual(Action.Left, 'LEFT');
+    assert.strictEqual(Action.Right, 'RIGHT');
   });
 });
 
@@ -17,8 +17,8 @@ describe('Coordinate', () => {
 
     const coordinate = new Coordinate(x, y);
 
-    assert.equal(coordinate.x, x);
-    assert.equal(coordinate.y, y);
+    assert.strictEqual(coordinate.x, x);
+    assert.strictEqual(coordinate.y, y);
   });
 
   it('translates the coordinate by delta', () => {
@@ -27,32 +27,32 @@ describe('Coordinate', () => {
 
     const coordinate = new Coordinate(x, -y);
 
-    // @ts-ignore
+    // @ts-expect-error
     assert.throws(() => coordinate.translateByDelta(undefined));
 
     const translatedCoordinate = coordinate.translateByDelta({ x, y });
 
-    assert.notEqual(translatedCoordinate, coordinate);
-    assert.equal(translatedCoordinate.x, 2 * x);
-    assert.equal(translatedCoordinate.y, 0);
+    assert.notStrictEqual(translatedCoordinate, coordinate);
+    assert.strictEqual(translatedCoordinate.x, 2 * x);
+    assert.strictEqual(translatedCoordinate.y, 0);
   });
 
   it('translates the coordinate by direction', () => {
     const coordinate = new Coordinate(0, 0);
 
-    // @ts-ignore
+    // @ts-expect-error
     assert.throws(() => coordinate.translateByAction(undefined));
 
-    assert.deepEqual(coordinate.translateByAction(Action.Up), new Coordinate(0, -1));
-    assert.deepEqual(coordinate.translateByAction(Action.Down), new Coordinate(0, 1));
-    assert.deepEqual(coordinate.translateByAction(Action.Left), new Coordinate(-1, 0));
-    assert.deepEqual(coordinate.translateByAction(Action.Right), new Coordinate(1, 0));
+    assert.deepStrictEqual(coordinate.translateByAction(Action.Up), new Coordinate(0, -1));
+    assert.deepStrictEqual(coordinate.translateByAction(Action.Down), new Coordinate(0, 1));
+    assert.deepStrictEqual(coordinate.translateByAction(Action.Left), new Coordinate(-1, 0));
+    assert.deepStrictEqual(coordinate.translateByAction(Action.Right), new Coordinate(1, 0));
   });
 
   it('computes the manhattan distance', () => {
     const coordinateA = new Coordinate(0, 0);
     const coordinateB = new Coordinate(3, 4);
 
-    assert.equal(coordinateA.manhattanDistanceTo(coordinateB), 7);
+    assert.strictEqual(coordinateA.manhattanDistanceTo(coordinateB), 7);
   });
 });
