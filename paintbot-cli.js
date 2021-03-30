@@ -42,8 +42,8 @@ async function run(botPath = defaultBotPath, { host, venue, autostart }) {
   const program = commander
     .version(pkg.version)
     .arguments('[paintbot-path]')
-    .option('--host [url]', 'The server to connect to', 'wss://server.paintbot.cygni.se')
-    .option('--venue [name]', 'Which venue to use', 'training')
+    .option('--host <url>', 'The server to connect to', 'wss://server.paintbot.cygni.se')
+    .option('--venue <name>', 'Which venue to use', 'training')
     .option('--autostart', 'Automatically start the game', true)
     .option('--no-autostart', 'Do not automatically start the game')
     .action(run);

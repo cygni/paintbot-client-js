@@ -45,7 +45,7 @@ npm start
 You can supply the path of your bot as an argument, e.g.:
 
 ```
-npm start ./bot/bot.js
+npm start -- ./bot/bot.js
 ```
 
 The default path is "./bot/bot.js".
@@ -61,7 +61,7 @@ There are also some other options:
 When the time comes for the real game to start, connect to it by setting the venue flag to "tournament", e.g.:
 
 ```
-npm start ./bot/bot.js --venue tournament
+npm start -- ./bot/bot.js --venue tournament
 ```
 
 ## Implementation
