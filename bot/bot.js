@@ -1,23 +1,38 @@
 import { Action, MessageType, MapUtility } from '../src/index.js';
 
-export const BOT_NAME = 'Power Mad';
+export const BOT_NAME = 'Turner';
 
-/*
-  This bot is hungry for power. It always goes for the closest power up.
-  It's smart enough to not crash into obstacles, but not smart enough to find a way around them.
-  If there are no power ups, it just moves in a random valid direction.
-*/
+const directionActions = [Action.Up, Action.Right, Action.Down, Action.Left];
 
-/**
- * @template T
- * @param {readonly T[]} items
- * @returns {T}
- */
-function randomItem(items) {
-  return items[Math.floor(Math.random() * items.length)];
+var currentDirection = 0;
+
+function canMoveForward(mapUtils) {
+  return mapUtils.canIMoveInDirection(directionActions[currentDirection]);
 }
 
-const directionActions = [Action.Down, Action.Up, Action.Left, Action.Right];
+function canMoveLeft(mapUtils) {
+  return mapUtils.canIMoveInDirection(directionActions[(currentDirection + 3) % 4]);
+}
+
+function canMoveRight(mapUtils) {
+  return mapUtils.canIMoveInDirection(directionActions[(currentDirection + 1) % 4]);
+}
+
+function canMoveBack(mapUtils) {
+  return mapUtils.canIMoveInDirection(directionActions[(currentDirection + 2) % 4]);
+}
+
+function turnLeft() {
+  currentDirection = (currentDirection + 3) % 4;
+}
+
+function turnRight() {
+  currentDirection = (currentDirection + 1) % 4;
+}
+
+function turnAround() {
+  currentDirection = (currentDirection + 2) % 4;
+}
 
 /**
  * @param {import('../src/index.js').MapUpdateEvent} mapUpdateEvent
@@ -31,37 +46,18 @@ export function getNextAction(mapUpdateEvent) {
     return Action.Explode;
   }
 
-  const powerUpCoordinates = mapUtils.getCoordinatesContainingPowerUps();
-
-  if (powerUpCoordinates.length) {
-    const myCoordinates = mapUtils.getMyCoordinate();
-
-    const sortedPowerUpCoordinates = powerUpCoordinates.sort(
-      (a, b) => a.manhattanDistanceTo(myCoordinates) - b.manhattanDistanceTo(myCoordinates),
-    );
-    const closestPowerUpCoordinate = sortedPowerUpCoordinates[0];
-
-    const xDiff = closestPowerUpCoordinate.x - myCoordinates.x;
-    const yDiff = closestPowerUpCoordinate.y - myCoordinates.y;
-
-    if (xDiff > 0 && mapUtils.canIMoveInDirection(Action.Right)) {
-      return Action.Right;
-    } else if (xDiff < 0 && mapUtils.canIMoveInDirection(Action.Left)) {
-      return Action.Left;
-    } else if (yDiff < 0 && mapUtils.canIMoveInDirection(Action.Up)) {
-      return Action.Up;
-    } else if (yDiff > 0 && mapUtils.canIMoveInDirection(Action.Down)) {
-      return Action.Down;
+  if (!canMoveForward(mapUtils)) {
+    if (canMoveLeft(mapUtils)) {
+      turnLeft();
+    } else if (canMoveRight(mapUtils)) {
+      turnRight();
+    } else if (canMoveBack(mapUtils)) {
+      turnAround();
+    } else {
+      return Action.Stay;
     }
   }
-
-  const validActions = directionActions.filter((action) => mapUtils.canIMoveInDirection(action));
-
-  if (!validActions.length) {
-    return Action.Stay;
-  }
-
-  return randomItem(validActions);
+  return directionActions[currentDirection];
 }
 
 // This handler is optional
@@ -86,7 +82,7 @@ export const GAME_SETTINGS = {
   pointsPerCausedStun: 5,
   noOfTicksInvulnerableAfterStun: 3,
   noOfTicksStunned: 10,
-  startObstacles: 5,
+  startObstacles: 30,
   startPowerUps: 0,
   gameDurationInSeconds: 60,
   explosionRange: 4,
