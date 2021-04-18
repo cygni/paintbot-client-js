@@ -4,7 +4,7 @@ export const BOT_NAME = 'Turner';
 
 const directionActions = [Action.Up, Action.Right, Action.Down, Action.Left];
 
-var currentDirection = 0;
+let currentDirection = 0;
 
 function canMoveForward(mapUtils) {
   return mapUtils.canIMoveInDirection(directionActions[currentDirection]);
@@ -65,6 +65,7 @@ export function onMessage(message) {
   switch (message.type) {
     case MessageType.GameStarting:
       // Reset bot state here
+      currentDirection = 0;
       break;
   }
 }
