@@ -75,9 +75,3 @@ Have a look at the [example bot](bot/bot.js) to get an idea of how it's done.
 ### Helper functions
 
 There's a utility class with nifty methods to help you out. Take a look at [`MapUtility`](src/utils.js) and what it offers.
-
-### Pitfalls
-
-Beware the common mishaps:
-
-- If two bots try to move to the same empty space, they will collide and stun each other. Once the stun ends, they risk doing the same thing again. And again, and again. Don't be the bot who runs into another bot the whole game! (`canIMoveInDirection` won't help you here, it only checks if the tile is currently empty - which it is!)
